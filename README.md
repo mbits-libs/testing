@@ -9,7 +9,6 @@ The tool contains a CMake script for easy configuration. Provided the tool was a
 set(???_TESTING ON CACHE BOOL "Compile and/or run self-tests")
 
 if (???_TESTING)
-  enable_testing()
   include( ${CMAKE_CURRENT_SOURCE_DIR}/tools/testing/googletest.cmake )
 endif()
 ```
@@ -22,20 +21,10 @@ Then in each tested library/module the tests themselves should be created:
 ##################################################################
 
 if (???_TESTING)
-set(DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests/data)
-configure_file(${PROJECT_DEFAULT_DATA_PATH}
-               ${CMAKE_CURRENT_BINARY_DIR}/default_data_path.hpp
-               @ONLY)
-message(STATUS "Test data: ${DATA_DIR}")
 
-file(GLOB TEST_SRCS tests/*.cc)
-
-add_executable(???-test "${CMAKE_SOURCE_DIR}/tools/googletest.cpp" ${TEST_SRCS})
-set_target_properties(???-test PROPERTIES FOLDER tests)
-target_link_libraries(???-test lib??? gtest gmock ${CMAKE_THREAD_LIBS_INIT})
-
-enable_testing()
-add_test(NAME ...
+add_test_executable(???-test DATA_PATH data LIBRARIES lib???)
+add_test(NAME some.name COMMAND ???-test --gtest_filter=??? --data_path=${DATA_DIR})
+...
 
 endif()
 ```
@@ -53,3 +42,23 @@ or
 ```shell
 ninja -j`nproc` && ninja test
 ```
+
+### add_test_executable(target [TEST_SUBDIR] [DATA_PATH] [LIBRARIES ...])
+
+The `add_test_executable` function takes the name of the executable target to create and, optionally, name of the subdirectory with test code, data directory within the test subdir and list of libraries to link against:
+
+#### target
+
+Name of the test target to create.
+
+#### TEST_SUBDIR dirname
+
+If present, will be used as a base for other options. Defaults to `tests`. Will be appended to `${CMAKE_CURRENT_SOURCE_DIR}`. The tests will be taken by globbing `${TEST_SUBDIR}/*.cc`.
+
+#### DATA_PATH dirname
+
+If present, will configure file `default_data_path.in.hpp` as `default_data_path.hpp`, using `${CMAKE_CURRENT_SOURCE_DIR}/${TEST_SUBDIR}/${DATA_PATH}` as the default data directory. It will also create `${DATA_DIR}` with the same value in the parent scope.
+
+### LIBRARIES target [target ...]
+
+List of targets this executable should be linked against. Apart from this list, the resulting target will be linked against `gtest`, `gmock` and `${CMAKE_THREAD_LIBS_INIT}`.

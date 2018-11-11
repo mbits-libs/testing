@@ -73,9 +73,9 @@
 #endif
 
 #ifdef HAS_DEFAULT_DATA_PATH
-fs::path LOCALE_data_path{ lngs::testing::directory_info::sources };
+fs::path TESTING_data_path{ lngs::testing::directory_info::sources };
 #else
-fs::path LOCALE_data_path{};
+fs::path TESTING_data_path{};
 #endif
 
 namespace {
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
 			if (ParseStringFlag(argv[i], "data_path", &value)
 				&& !value.empty()) {
 				printf("Note: data used from path: %s\n", value.c_str());
-				LOCALE_data_path = value;
+				TESTING_data_path = value;
 			}
 		}
 	}
