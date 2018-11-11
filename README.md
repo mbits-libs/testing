@@ -31,7 +31,7 @@ endif()
 
 ### Generating
 
-When properly configured, call the build system with the `coveralls` target, either
+When properly configured, call the build system with the `test` target, either
 
 ```shell
 make -j`nproc` && make test
@@ -41,6 +41,12 @@ or
 
 ```shell
 ninja -j`nproc` && ninja test
+```
+
+or
+
+```shell
+ninja -j`nproc` && ctest .
 ```
 
 ### add_test_executable(target [TEST_SUBDIR] [DATA_PATH] [LIBRARIES ...])
