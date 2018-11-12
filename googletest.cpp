@@ -65,7 +65,7 @@
 #include <iostream>
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include <locale/file.hpp>
+#include <filesystem>
 
 #if __has_include(<default_data_path.hpp>)
 #include <default_data_path.hpp>
@@ -73,9 +73,9 @@
 #endif
 
 #ifdef HAS_DEFAULT_DATA_PATH
-fs::path TESTING_data_path{ lngs::testing::directory_info::sources };
+std::filesystem::path TESTING_data_path{ lngs::testing::directory_info::sources };
 #else
-fs::path TESTING_data_path{};
+std::filesystem::path TESTING_data_path{};
 #endif
 
 namespace {
