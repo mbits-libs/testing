@@ -138,7 +138,7 @@ int main(int argc, char** argv)
 #endif
 {
 	std::cout << "Running main() from googletest.cpp\n";
-	testing::InitGoogleMock(&argc, argv);
+	testing::InitGoogleTest(&argc, argv);
 	if (argc > 0) {
 		using namespace testing::internal;
 		for (int i = 1; i != argc; i++) {
