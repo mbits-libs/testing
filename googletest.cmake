@@ -40,7 +40,7 @@ function(add_test_executable TARGET)
 
 	file(GLOB TEST_SRCS ${TEST_EXE_TEST_SUBDIR}/*.cc)
 	add_executable(${TARGET} "${TEST_EXE_GTEST_MAIN_CC}" ${TEST_SRCS})
-	set_target_properties(${TARGET} PROPERTIES FOLDER ${TEST_EXE_TEST_SUBDIR})
+	set_target_properties(${TARGET} PROPERTIES FOLDER ${TEST_EXE_TEST_SUBDIR} CXX_STANDARD 17 CXX_EXTENSIONS OFF)
 	target_link_libraries(${TARGET} ${TEST_EXE_LIBRARIES} gtest gmock ${CMAKE_THREAD_LIBS_INIT})
 	target_include_directories(${TARGET}
 		PRIVATE
