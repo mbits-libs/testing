@@ -4,12 +4,13 @@ find_package(Threads REQUIRED)
 set(PROJECT_DEFAULT_DATA_PATH "${CMAKE_CURRENT_LIST_DIR}/default_data_path.in.hpp")
 set(PROJECT_GTEST_MAIN_CC "${CMAKE_CURRENT_LIST_DIR}/googletest.cpp")
 
-find_package(GTest)
+# Since adding CONAN_PKG argument to add_test_executable,
+# users need to call find_package(GTest) on their own
 
 include(CMakeParseArguments)
 
 function(add_test_executable TARGET)
-	CMAKE_PARSE_ARGUMENTS(TEST_EXE "NO_DATA" "DATA_PATH;TEST_SUBDIR" "LIBRARIES" ${ARGN})
+	CMAKE_PARSE_ARGUMENTS(TEST_EXE "NO_DATA;CONAN_PKG" "DATA_PATH;TEST_SUBDIR" "LIBRARIES" ${ARGN})
 
 	if (NOT TEST_EXE_TEST_SUBDIR)
 		set(TEST_EXE_TEST_SUBDIR tests)
@@ -22,10 +23,18 @@ function(add_test_executable TARGET)
 		set(DATA_DIR "${TEST_EXE_DATA_DIR}" PARENT_SCOPE)
 	endif()
 
+	if (TEST_EXE_CONAN_PKG)
+		list(APPEND TEST_EXE_LIBRARIES CONAN_PKG::gtest)
+		message(STATUS "${TARGET} uses CONAN_PKG::gtest")
+	else()
+		list(APPEND TEST_EXE_LIBRARIES GTest::GTest)
+		message(STATUS "${TARGET} uses GTest::GTest")
+	endif()
+
 	file(GLOB TEST_SRCS ${TEST_EXE_TEST_SUBDIR}/*.cc)
 	add_executable(${TARGET} "${PROJECT_GTEST_MAIN_CC}" ${TEST_SRCS})
 	set_target_properties(${TARGET} PROPERTIES FOLDER ${TEST_EXE_TEST_SUBDIR} CXX_STANDARD 17 CXX_EXTENSIONS OFF)
-	target_link_libraries(${TARGET} ${TEST_EXE_LIBRARIES} GTest::GTest)
+	target_link_libraries(${TARGET} ${TEST_EXE_LIBRARIES})
 	target_include_directories(${TARGET}
 		PRIVATE
 			${CMAKE_CURRENT_SOURCE_DIR}/${TEST_EXE_TEST_SUBDIR}
