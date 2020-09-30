@@ -35,7 +35,7 @@ function(add_test_executable TARGET)
 	file(GLOB TEST_SRCS_CPP ${TEST_EXE_TEST_SUBDIR}/*.cpp)
 	file(GLOB TEST_SRCS_CXX ${TEST_EXE_TEST_SUBDIR}/*.cxx)
 	add_executable(${TARGET} "${PROJECT_GTEST_MAIN_CC}" ${TEST_SRCS_CC} ${TEST_SRCS_CPP} ${TEST_SRCS_CXX})
-	set_target_properties(${TARGET} PROPERTIES FOLDER ${TEST_EXE_TEST_SUBDIR} CXX_STANDARD 17 CXX_EXTENSIONS OFF)
+	set_target_properties(${TARGET} PROPERTIES FOLDER ${TEST_EXE_TEST_SUBDIR})
 	target_link_libraries(${TARGET} ${TEST_EXE_LIBRARIES})
 	target_include_directories(${TARGET}
 		PRIVATE
