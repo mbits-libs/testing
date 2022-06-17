@@ -72,7 +72,7 @@
 #endif
 
 #ifdef HAS_DEFAULT_DATA_PATH
-std::filesystem::path TESTING_data_path{ lngs::testing::directory_info::sources };
+std::filesystem::path TESTING_data_path{ testing::directory_info::sources };
 #else
 std::filesystem::path TESTING_data_path{};
 #endif

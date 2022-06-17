@@ -24,7 +24,7 @@
 
 #pragma once
 
-namespace lngs::testing {
+namespace testing {
 	struct directory_info {
 		constexpr static const char sources[] = "@TEST_EXE_DATA_DIR@";
 	};
